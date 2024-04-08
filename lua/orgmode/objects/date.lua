@@ -220,7 +220,9 @@ end
 ---@return OrgDate
 local function now(data)
   local date = os_date(os.time())
+  local roundedMinute = math.floor((date.min + 2.5) / 5) * 5
   local opts = vim.tbl_deep_extend('force', date, data or {}) --[[@as OrgDateOpts]]
+  opts.min = roundedMinute
   return Date:new(opts)
 end
 
