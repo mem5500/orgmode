@@ -1012,6 +1012,12 @@ function OrgMappings:org_time_stamp(inactive)
     if not new_date then
       return nil
     end
+
+    local current_time = os.date("*t")
+    new_date.hour = current_time.hour
+    new_date.min = current_time.min
+    new_date.date_only = false
+
     local date_string = new_date:to_wrapped_string(not inactive)
     if date_start then
       date_string = '--' .. date_string
