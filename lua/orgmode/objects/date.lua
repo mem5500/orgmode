@@ -16,6 +16,7 @@ local time_format = '%H:%M'
 ---@field hour? number
 ---@field min? number
 ---@field date_only? boolean
+---@field round_minute? boolean
 ---@field type? string
 ---@field range? OrgRange
 ---@field active? boolean
@@ -230,12 +231,12 @@ function OrgDate:clone(opts)
   return self:set(opts or {})
 end
 
----Return todays date without the time
+---Return todays date with the time
 ---@param opts? OrgDateOpts
 ---@return OrgDate
 function OrgDate.today(opts)
   opts = opts or {}
-  opts.date_only = true
+  opts.date_only = false
   return OrgDate.from_timestamp(os.time(), opts)
 end
 
@@ -243,6 +244,8 @@ end
 ---@param opts? OrgDateOpts
 ---@return OrgDate
 function OrgDate.now(opts)
+  opts = opts or {}
+  opts.round_minute = true
   return OrgDate.from_timestamp(os.time(), opts)
 end
 
@@ -267,6 +270,10 @@ function OrgDate.from_timestamp(timestamp, opts)
   if not opts or not opts.date_only then
     data.hour = date.hour
     data.min = date.min
+  end
+  if opts and opts.round_minute then
+    local rounded_minute = math.floor((date.min + 2.5) / 5) * 5
+    data.min = rounded_minute
   end
   if opts then
     data = vim.tbl_extend('force', opts, data)
