@@ -84,6 +84,11 @@ function Logbook:add_clock_in()
   local indent = vim.fn.getline(self.range.start_line):match('^%s*')
   local line = self.range.start_line
   local date = Date.now({ active = false })
+  -- vim.notify(vim.inspect(date.min))
+  local minute = date.min
+  local delta = 5 * math.floor((minute + 2.5) / 5.0) - minute
+  date = date:add { min = delta }
+  -- vim.notify(vim.inspect(delta))
   local content = string.format('%sCLOCK: %s', indent, date:to_wrapped_string())
   table.insert(self.items, {
     start_time = date,
@@ -101,6 +106,11 @@ function Logbook:clock_out()
   local line_nr = active_item.start_time.range.start_line
   local line = vim.fn.getline(line_nr)
   local date = Date.now({ active = false })
+  -- vim.notify(vim.inspect(date.min))
+  local minute = date.min
+  local delta = 5 * math.floor((minute + 2.5) / 5.0) - minute
+  date = date:add { min = delta }
+  -- vim.notify(vim.inspect(delta))
   active_item.end_time = date
   active_item.duration = Duration.from_seconds(date.timestamp - active_item.start_time.timestamp)
   local minutes = active_item.duration:to_string('HH:MM')
