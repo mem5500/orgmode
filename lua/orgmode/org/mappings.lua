@@ -1025,6 +1025,9 @@ function OrgMappings:org_time_stamp(inactive)
     if not new_date then
       return nil
     end
+
+    new_date = new_date:set({ date_only = false }):set_current_time()
+
     local date_string = new_date:to_wrapped_string(not inactive)
     if date_start then
       date_string = '--' .. date_string

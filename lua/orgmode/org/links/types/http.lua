@@ -39,6 +39,10 @@ end
 function OrgLinkHttp:_parse(link)
   local is_url = link:match('^https?:.+$')
   if is_url then
+    local is_url_to_file = link:match('^https?://file:(.+)$')
+    if is_url_to_file then
+      return 'file:' .. is_url_to_file
+    end
     return link
   end
 

@@ -454,6 +454,7 @@ function OrgDate:format_time()
   if not self:has_time() then
     return ''
   end
+
   local t = self:format(time_format)
   if self.timestamp_end then
     t = t .. '-' .. os.date(time_format, self.timestamp_end)
